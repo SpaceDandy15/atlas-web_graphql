@@ -1,5 +1,3 @@
-// server/schema/schema.js
-
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -7,7 +5,7 @@ const {
   GraphQLSchema
 } = require('graphql');
 
-// Define the TaskType
+// Define TaskType as before
 const TaskType = new GraphQLObjectType({
   name: 'Task',
   fields: {
@@ -18,26 +16,22 @@ const TaskType = new GraphQLObjectType({
   }
 });
 
-// RootQuery with one example task
+// Define RootQueryType with task field accepting id argument
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     task: {
       type: TaskType,
+      args: {
+        id: { type: GraphQLString }  // argument to query a specific task by id
+      },
       resolve(parent, args) {
-        // Dummy data
-        return {
-          id: '1',
-          title: 'Write GraphQL schema',
-          weight: 3,
-          description: 'Set up TaskType and RootQuery for testing'
-        };
+        return null;
       }
     }
   }
 });
 
-// Export the schema
 module.exports = new GraphQLSchema({
   query: RootQuery
 });
