@@ -1,0 +1,23 @@
+query {
+  project(id: "68741dde0e734293777f0195") {
+    id
+    title
+    description
+    weight
+    tasks {
+      id
+      title
+    }
+  }
+}
+{
+  "data": {
+    "project": {
+      "id": "68741dde0e734293777f0195",
+      "title": "Advanced HTML",
+      "description": "Welcome to the Web Stack specialization. The 3 first projects will give you all basics of Web development: HTML, CSS, and Developer tools.",
+      "weight": 1,
+      "tasks": []
+    }
+  }
+}
