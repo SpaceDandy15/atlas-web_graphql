@@ -1,30 +1,31 @@
 // server/app.js
-require('dotenv').config();
+
+require('dotenv').config(); // Load environment variables
 
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
-const schema = require('./schema/schema');
 const mongoose = require('mongoose');
+const schema = require('./schema/schema');
 
 const app = express();
 
 // Connect to MongoDB Atlas
-mongoose.connect('', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-mongoose.connection.once('open', () => {
-  console.log('connected to database');
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('Connected to MongoDB Atlas');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err.message);
+  });
 
 // GraphQL endpoint
 app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  graphiql: true  // Enables GraphiQL GUI at http://localhost:4000/graphql
+  schema,
+  graphiql: true, // Enable GraphiQL UI
 }));
 
-// Start server
-app.listen(4000, () => {
-  console.log('now listening for request on port 4000');
+// Start Express server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}/graphql`);
 });

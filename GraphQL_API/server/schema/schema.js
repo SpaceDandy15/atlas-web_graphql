@@ -4,7 +4,8 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLID,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = require('graphql');
 
 const Task = require('../models/task');       // Mongoose Task
@@ -21,7 +22,6 @@ const TaskType = new GraphQLObjectType({
     project: {
       type: ProjectType,
       resolve(parent, args) {
-        // Find the project linked to this task by projectId
         return Project.findById(parent.projectId);
       }
     }
@@ -39,7 +39,6 @@ const ProjectType = new GraphQLObjectType({
     tasks: {
       type: new GraphQLList(TaskType),
       resolve(parent, args) {
-        // Find all tasks with projectId = parent.id
         return Task.find({ projectId: parent.id });
       }
     }
@@ -79,6 +78,48 @@ const RootQuery = new GraphQLObjectType({
   })
 });
 
+// Mutation
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addProject: {
+      type: ProjectType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        weight: { type: new GraphQLNonNull(GraphQLInt) },
+        description: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve(parent, args) {
+        const project = new Project({
+          title: args.title,
+          weight: args.weight,
+          description: args.description
+        });
+        return project.save();
+      }
+    },
+    addTask: {
+      type: TaskType,
+      args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        weight: { type: new GraphQLNonNull(GraphQLInt) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        projectId: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      resolve(parent, args) {
+        const task = new Task({
+          title: args.title,
+          weight: args.weight,
+          description: args.description,
+          projectId: args.projectId
+        });
+        return task.save();
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
