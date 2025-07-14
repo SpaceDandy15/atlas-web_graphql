@@ -1,4 +1,5 @@
 // server/app.js
+require('dotenv').config();
 
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
@@ -8,7 +9,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Connect to MongoDB Atlas
-mongoose.connect('mongodb+srv://malikovance:NKei6aKv2TQSKSmb@cluster0.axq6bf5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect('', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

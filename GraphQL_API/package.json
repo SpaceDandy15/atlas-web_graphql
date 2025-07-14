@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "apollo-boost": "^0.4.9",
+    "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "express-graphql": "^0.12.0",
     "graphql": "^16.11.0",
